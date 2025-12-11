@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-cream text-dark font-sans;
+    overflow-x: hidden;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer components {
+  .label-accent {
+    @apply uppercase tracking-widest text-accent text-xs font-medium;
+  }
+
+  .title-serif {
+    @apply font-serif font-medium leading-tight;
+  }
+
+  .btn-outline {
+    @apply border border-accent text-dark px-6 py-3 text-sm tracking-wider uppercase transition-all duration-300;
+  }
+
+  .btn-outline:hover {
+    @apply bg-accent text-cream;
+  }
+
+  .btn-outline-light {
+    @apply border border-cream/30 text-cream px-6 py-3 text-sm tracking-wider uppercase transition-all duration-300;
+  }
+
+  .btn-outline-light:hover {
+    @apply bg-cream text-anthracite;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .clip-diamond {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+
+  .clip-triangle-up {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+
+  .clip-triangle-down {
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+  }
+
+  .clip-parallelogram {
+    clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+  }
+
+  .clip-hexagon {
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Logo icon "M" - Oleo Script Swash Caps with solid brown */
+.logo-icon {
+  font-family: 'Oleo Script Swash Caps', cursive;
+  font-weight: 700;
+  font-size: 52px;
+  line-height: 0.9;
+  display: inline-block;
+  color: #6B5344;
+  transition: color 0.3s ease;
+}
+
+.logo-icon:hover {
+  color: #8B7355;
+}
+
+/* Alternative: SVG-like roof pattern */
+.logo-icon-pattern {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 44px;
+  line-height: 1;
+  display: inline-block;
+  background:
+    /* Slate/ardoise pattern */
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 4px,
+      rgba(74, 55, 40, 0.3) 4px,
+      rgba(74, 55, 40, 0.3) 5px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      #6B5344 0px,
+      #6B5344 6px,
+      #7D6352 6px,
+      #7D6352 7px,
+      #5A4436 7px,
+      #5A4436 12px,
+      #8B7355 12px,
+      #8B7355 13px
+    ),
+    linear-gradient(135deg, #8B7355 0%, #5A4436 50%, #3D2E20 100%);
+  background-size: 8px 8px, 100% 14px, 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: background-position 0.3s ease;
+}
+
+.logo-icon-pattern:hover {
+  background-position: 2px 0, 0 2px, 0 0;
+}
+
+/* Simple gradient logo text */
+.logo-text {
+  background: linear-gradient(135deg, #8B7355 0%, #6B5344 50%, #4A3728 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Hero large M logo with villa/roof image - Oleo Script Swash Caps, overlaps next section */
+.hero-logo-icon {
+  font-family: 'Oleo Script Swash Caps', cursive;
+  font-weight: 700;
+  font-size: clamp(300px, 90vw, 550px);
+  line-height: 0.85;
+  display: inline-block;
+  /* House with roof */
+  background-image: url('https://images.unsplash.com/photo-1557671009-600c3a1973ca?w=900&q=80');
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  cursor: default;
+  user-select: none;
+}
+
+/* Hero M container - only bottom part goes behind */
+.hero-logo-container {
+  position: relative;
+  z-index: 1;
+  margin-bottom: -60px;
+  padding-bottom: 0;
+}
+
+/* Parallax container */
+.parallax-container {
+  perspective: 1px;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Custom scrollbar for desktop */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #F5F0EB;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #B8A088;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9A8570;
+  }
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-500 { animation-delay: 0.5s; }
