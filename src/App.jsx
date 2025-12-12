@@ -53,19 +53,51 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const navLinks = [
+    { label: 'Services', href: '#services' },
+    { label: 'Réalisations', to: '/realisations', isLink: true },
+    { label: 'Avis', href: '#avis' },
+    { label: 'Contact', href: '#contact' },
+  ]
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled ? 'bg-cream/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'
       }`}
     >
-      <div className="px-5 py-3 flex items-center justify-between">
+      <div className="px-5 lg:px-12 xl:px-20 py-3 lg:py-4 flex items-center justify-between max-w-[1800px] mx-auto">
         <Logo />
+
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:flex items-center gap-8">
+          {navLinks.map((link) => (
+            link.isLink ? (
+              <Link
+                key={link.label}
+                to={link.to}
+                className="text-sm font-medium text-dark hover:text-accent transition-colors"
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sm font-medium text-dark hover:text-accent transition-colors"
+              >
+                {link.label}
+              </a>
+            )
+          ))}
+        </nav>
+
         <a
           href="tel:0612345678"
           className="flex items-center gap-2 text-sm font-medium text-dark hover:text-accent transition-colors"
         >
-          <span>06 12 34 56 78</span>
+          <span className="hidden sm:inline">06 12 34 56 78</span>
+          <span className="sm:hidden">Appeler</span>
           <span className="text-accent">&rarr;</span>
         </a>
       </div>
@@ -87,35 +119,50 @@ const Hero = () => {
   }, [])
 
   return (
-    <section ref={heroRef} className="pt-20 px-5 pb-0 bg-cream relative">
-      <div className="max-w-lg mx-auto">
-        {/* SIRET Label */}
-        <p className="label-accent mb-6 opacity-0 animate-fade-in-up">
-          SIRET N&deg; 123 456 789
-        </p>
+    <section ref={heroRef} className="pt-20 lg:pt-28 px-5 lg:px-12 xl:px-20 pb-0 bg-cream relative">
+      <div className="max-w-lg lg:max-w-7xl mx-auto">
+        {/* Desktop: Two column layout */}
+        <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center lg:min-h-[60vh]">
+          <div className="lg:max-w-xl">
+            {/* SIRET Label */}
+            <p className="label-accent mb-6 opacity-0 animate-fade-in-up">
+              SIRET N&deg; 123 456 789
+            </p>
 
-        {/* Main Title */}
-        <h1 className="title-serif text-5xl sm:text-6xl mb-6 opacity-0 animate-fade-in-up animation-delay-100">
-          Couverture<br />
-          <span className="text-accent">&amp;</span> R&eacute;novation
-        </h1>
+            {/* Main Title */}
+            <h1 className="title-serif text-5xl sm:text-6xl lg:text-7xl xl:text-8xl mb-6 opacity-0 animate-fade-in-up animation-delay-100">
+              Couverture<br />
+              <span className="text-accent">&amp;</span> R&eacute;novation
+            </h1>
 
-        {/* Description */}
-        <p className="text-dark/70 text-base leading-relaxed mb-8 opacity-0 animate-fade-in-up animation-delay-200">
-          Prot&eacute;ger votre maison demande plus que des tuiles et du zinc.
-          Cela exige savoir-faire, rigueur et attention aux d&eacute;tails.
-        </p>
+            {/* Description */}
+            <p className="text-dark/70 text-base lg:text-lg leading-relaxed mb-8 opacity-0 animate-fade-in-up animation-delay-200 lg:max-w-md">
+              Prot&eacute;ger votre maison demande plus que des tuiles et du zinc.
+              Cela exige savoir-faire, rigueur et attention aux d&eacute;tails.
+            </p>
 
-        {/* CTA Button */}
-        <div className="opacity-0 animate-fade-in-up animation-delay-300 mb-8">
-          <a href="#contact" className="btn-outline inline-block">
-            Demander un devis
-          </a>
+            {/* CTA Button */}
+            <div className="opacity-0 animate-fade-in-up animation-delay-300 mb-8 lg:mb-0">
+              <a href="#contact" className="btn-outline inline-block">
+                Demander un devis
+              </a>
+            </div>
+          </div>
+
+          {/* Desktop: Large M visible in right column */}
+          <div className="hidden lg:flex justify-center items-center">
+            <div
+              className="hero-logo-icon-desktop"
+              style={{ transform: `translateY(${offset * 0.3}px)` }}
+            >
+              M
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Large M Logo - parallax: moves slower than scroll so section covers it */}
-      <div className="hero-logo-container flex justify-center opacity-0 animate-fade-in-up animation-delay-400">
+      {/* Mobile: Large M Logo - parallax: moves slower than scroll so section covers it */}
+      <div className="hero-logo-container flex justify-center opacity-0 animate-fade-in-up animation-delay-400 lg:hidden">
         <div
           className="hero-logo-icon"
           style={{ transform: `translateY(${offset * 0.4}px)` }}
@@ -168,15 +215,15 @@ const ServicesSection = () => {
   ]
 
   return (
-    <section ref={sectionRef} className="bg-anthracite pt-16 pb-20 px-5 relative z-10">
-      <div className="max-w-lg mx-auto">
+    <section ref={sectionRef} id="services" className="bg-anthracite pt-16 lg:pt-24 pb-20 lg:pb-32 px-5 lg:px-12 xl:px-20 relative z-10">
+      <div className="max-w-lg lg:max-w-7xl mx-auto">
         {/* Header */}
         <p className={`label-accent mb-8 text-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           CE QUE NOUS FAISONS
         </p>
 
         {/* Description - Klindworth style long text */}
-        <p className={`text-cream/90 text-lg sm:text-xl leading-relaxed mb-16 font-serif transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        <p className={`text-cream/90 text-lg sm:text-xl lg:text-2xl leading-relaxed mb-16 lg:mb-20 font-serif text-center lg:max-w-3xl lg:mx-auto transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           Toiture Martin propose une gamme compl&egrave;te de services de couverture,
           des solutions traditionnelles en tuiles aux installations modernes en zinc.
           Sp&eacute;cialis&eacute;s dans la r&eacute;novation et les r&eacute;parations d'urgence,
@@ -185,8 +232,8 @@ const ServicesSection = () => {
           d'artisan couvreur de r&eacute;f&eacute;rence dans le Pas-de-Calais.
         </p>
 
-        {/* Services Cards - Large vertical layout */}
-        <div className="space-y-12">
+        {/* Services Cards - Grid on desktop, vertical on mobile */}
+        <div className="space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-8">
           {services.map((service, index) => (
             <div
               key={service.title}
@@ -194,7 +241,7 @@ const ServicesSection = () => {
               style={{ transitionDelay: `${200 + index * 150}ms` }}
             >
               {/* Large Image with premium reveal */}
-              <div className="aspect-[4/3] mb-5 overflow-hidden relative">
+              <div className="aspect-[4/3] lg:aspect-[3/4] mb-5 overflow-hidden relative">
                 {/* Image with scale animation */}
                 <div
                   className={`w-full h-full transition-all duration-1000 ease-out ${isVisible ? 'scale-100' : 'scale-110'}`}
@@ -216,7 +263,7 @@ const ServicesSection = () => {
               {/* Title with arrow */}
               <div className="flex items-center gap-2 mb-1">
                 <h3
-                  className="text-cream text-lg font-medium"
+                  className="text-cream text-lg lg:text-xl font-medium"
                   dangerouslySetInnerHTML={{ __html: service.title }}
                 />
                 <span className="text-accent group-hover:translate-x-2 transition-transform duration-300">&rarr;</span>
@@ -224,7 +271,7 @@ const ServicesSection = () => {
 
               {/* Tagline */}
               <p
-                className="text-cream/50 text-sm"
+                className="text-cream/50 text-sm lg:text-base"
                 dangerouslySetInnerHTML={{ __html: service.tagline }}
               />
             </div>
@@ -239,8 +286,10 @@ const ServicesSection = () => {
 const PortfolioSection = () => {
   const [cardStates, setCardStates] = useState([])
   const [travailsState, setTravailsState] = useState({ opacity: 1, scale: 1 })
+  const [isVisible, setIsVisible] = useState(false)
   const cardsRef = useRef([])
   const titleRef = useRef(null)
+  const sectionRef = useRef(null)
 
   const projects = [
     { name: 'DUPONT', location: 'Arras', image: 'https://images.pexels.com/photos/18397905/pexels-photo-18397905.jpeg?auto=compress&cs=tinysrgb&w=800' },
@@ -248,8 +297,30 @@ const PortfolioSection = () => {
     { name: 'MARTIN', location: 'Douai', image: 'https://images.pexels.com/photos/32682864/pexels-photo-32682864.jpeg?auto=compress&cs=tinysrgb&w=800' },
   ]
 
+  // Visibility observer for desktop animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  // Mobile stacking effect
   useEffect(() => {
     const handleScroll = () => {
+      // Only apply stacking effect on mobile
+      if (window.innerWidth >= 1024) return
+
       // Fade out and shrink TRAVAUX title based on first card position
       const firstCard = cardsRef.current[0]
       if (firstCard && titleRef.current) {
@@ -300,11 +371,11 @@ const PortfolioSection = () => {
   }, [])
 
   return (
-    <section id="realisations" className="bg-anthracite">
-      {/* Title section - sticky */}
+    <section ref={sectionRef} id="realisations" className="bg-anthracite">
+      {/* Mobile: Title section - sticky */}
       <div
         ref={titleRef}
-        className="sticky top-[10vh] py-8 flex items-center justify-center z-0"
+        className="lg:hidden sticky top-[10vh] py-8 flex items-center justify-center z-0"
         style={{
           opacity: travailsState.opacity,
           transform: `scale(${travailsState.scale})`,
@@ -316,8 +387,15 @@ const PortfolioSection = () => {
         </h2>
       </div>
 
-      {/* Cards section - comes over TRAVAUX */}
-      <div className="px-5 pb-8 relative">
+      {/* Desktop: Static title */}
+      <div className="hidden lg:block pt-24 pb-12">
+        <h2 className={`font-serif text-[10vw] xl:text-[8vw] text-cream font-medium tracking-tight leading-none text-center select-none transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          TRAVAUX
+        </h2>
+      </div>
+
+      {/* Mobile: Cards section - comes over TRAVAUX */}
+      <div className="lg:hidden px-5 pb-8 relative">
         <div className="max-w-lg mx-auto">
           {projects.map((project, index) => {
             const state = cardStates[index] || { opacity: 1, scale: 1 }
@@ -350,8 +428,32 @@ const PortfolioSection = () => {
         </div>
       </div>
 
+      {/* Desktop: Grid layout */}
+      <div className="hidden lg:block px-12 xl:px-20 pb-16">
+        <div className="max-w-7xl mx-auto grid grid-cols-3 gap-6">
+          {projects.map((project, index) => (
+            <div
+              key={project.name}
+              className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              style={{ transitionDelay: `${200 + index * 150}ms` }}
+            >
+              <div className="relative aspect-[4/3] overflow-hidden shadow-2xl group cursor-pointer">
+                <img src={project.image} alt={`Chantier ${project.name}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-b from-anthracite/30 via-transparent to-anthracite/50" />
+                <h3 className="absolute top-6 left-6 font-serif text-4xl xl:text-5xl text-cream font-medium drop-shadow-lg">
+                  {project.name}
+                </h3>
+                <p className="absolute bottom-6 left-6 text-cream/80 text-sm">
+                  {project.location}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* CTA Button */}
-      <div className="px-5 py-12 text-center relative z-20">
+      <div className="px-5 py-12 lg:py-16 text-center relative z-20">
         <Link to="/realisations" className="btn-outline-light inline-block">
           Voir tous nos chantiers
         </Link>
@@ -365,8 +467,10 @@ const RealisationsPage = () => {
   const [cardStates, setCardStates] = useState([])
   const [travailsState, setTravailsState] = useState({ opacity: 1, scale: 1 })
   const [activeFilter, setActiveFilter] = useState('all')
+  const [isVisible, setIsVisible] = useState(false)
   const cardsRef = useRef([])
   const titleRef = useRef(null)
+  const gridRef = useRef(null)
 
   const filters = [
     { id: 'all', label: 'Tous' },
@@ -394,10 +498,34 @@ const RealisationsPage = () => {
   useEffect(() => {
     // Reset refs when filter changes
     cardsRef.current = []
+    setIsVisible(false)
+    setTimeout(() => setIsVisible(true), 50)
   }, [activeFilter])
 
+  // Visibility observer for desktop animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (gridRef.current) {
+      observer.observe(gridRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  // Mobile stacking effect
   useEffect(() => {
     const handleScroll = () => {
+      // Only apply stacking effect on mobile
+      if (window.innerWidth >= 1024) return
+
       // Fade out and shrink TRAVAUX title based on first card position
       const firstCard = cardsRef.current[0]
       if (firstCard && titleRef.current) {
@@ -457,18 +585,37 @@ const RealisationsPage = () => {
       <Header />
 
       {/* Hero header */}
-      <div className="pt-24 pb-8 px-5">
-        <div className="max-w-lg mx-auto">
-          <p className="label-accent mb-4">NOS R&Eacute;ALISATIONS</p>
-          <h1 className="title-serif text-4xl sm:text-5xl mb-6">
-            D&eacute;couvrez nos<br />
-            <span className="text-accent">chantiers</span>
-          </h1>
+      <div className="pt-24 lg:pt-32 pb-8 lg:pb-12 px-5 lg:px-12 xl:px-20">
+        <div className="max-w-lg lg:max-w-7xl mx-auto lg:flex lg:items-end lg:justify-between">
+          <div>
+            <p className="label-accent mb-4">NOS R&Eacute;ALISATIONS</p>
+            <h1 className="title-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl mb-6 lg:mb-0">
+              D&eacute;couvrez nos<br />
+              <span className="text-accent">chantiers</span>
+            </h1>
+          </div>
+
+          {/* Desktop Filters */}
+          <div className="hidden lg:flex flex-wrap justify-end gap-3">
+            {filters.map((filter) => (
+              <button
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                  activeFilter === filter.id
+                    ? 'bg-accent text-cream'
+                    : 'bg-dark/5 text-dark hover:bg-dark/10'
+                }`}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="pb-8 px-5">
+      {/* Mobile Filters */}
+      <div className="lg:hidden pb-8 px-5">
         <div className="max-w-lg mx-auto">
           <div className="flex flex-wrap justify-center gap-3">
             {filters.map((filter) => (
@@ -490,10 +637,10 @@ const RealisationsPage = () => {
 
       {/* Main content with dark background */}
       <div className="bg-anthracite">
-        {/* Title section - sticky */}
+        {/* Mobile: Title section - sticky */}
         <div
           ref={titleRef}
-          className="sticky top-[10vh] py-8 flex items-center justify-center z-0"
+          className="lg:hidden sticky top-[10vh] py-8 flex items-center justify-center z-0"
           style={{
             opacity: travailsState.opacity,
             transform: `scale(${travailsState.scale})`,
@@ -505,8 +652,15 @@ const RealisationsPage = () => {
           </h2>
         </div>
 
-        {/* Cards section - comes over TRAVAUX */}
-        <div className="px-5 pb-16 relative">
+        {/* Desktop: Static title */}
+        <div className="hidden lg:block pt-20 pb-12">
+          <h2 className="font-serif text-[10vw] xl:text-[8vw] text-cream font-medium tracking-tight leading-none text-center select-none">
+            TRAVAUX
+          </h2>
+        </div>
+
+        {/* Mobile: Cards section - comes over TRAVAUX */}
+        <div className="lg:hidden px-5 pb-16 relative">
           <div className="max-w-lg mx-auto">
             {filteredProjects.map((project, index) => {
               const state = cardStates[index] || { opacity: 1, scale: 1 }
@@ -544,9 +698,38 @@ const RealisationsPage = () => {
           </div>
         </div>
 
+        {/* Desktop: Grid layout */}
+        <div ref={gridRef} className="hidden lg:block px-12 xl:px-20 pb-20">
+          <div className="max-w-7xl mx-auto grid grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredProjects.map((project, index) => (
+              <div
+                key={`${project.name}-${activeFilter}-desktop`}
+                className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                style={{ transitionDelay: `${100 + index * 100}ms` }}
+              >
+                <div className="relative aspect-[4/3] overflow-hidden shadow-2xl group cursor-pointer">
+                  <img src={project.image} alt={`Chantier ${project.name}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-anthracite/30 via-transparent to-anthracite/50" />
+                  <h3 className="absolute top-6 left-6 font-serif text-4xl xl:text-5xl text-cream font-medium drop-shadow-lg">
+                    {project.name}
+                  </h3>
+                  <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                    <p className="text-cream/80 text-sm">
+                      {project.location}
+                    </p>
+                    <span className="text-cream/60 text-xs uppercase tracking-wider">
+                      {project.category}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Results count */}
-        <div className="px-5 py-12 bg-anthracite text-center">
-          <p className="text-cream/50 text-sm">
+        <div className="px-5 py-12 lg:py-16 bg-anthracite text-center">
+          <p className="text-cream/50 text-sm lg:text-base">
             {filteredProjects.length} r&eacute;alisation{filteredProjects.length > 1 ? 's' : ''}
             {activeFilter !== 'all' && ` en ${filters.find(f => f.id === activeFilter)?.label.toLowerCase()}`}
           </p>
@@ -603,23 +786,34 @@ const ServicesCarousel = () => {
   }, [])
 
   return (
-    <section ref={sectionRef} className="bg-cream py-16">
-      <div className="px-5 max-w-lg mx-auto">
-        <p className={`label-accent mb-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          SERVICES
-        </p>
+    <section ref={sectionRef} className="bg-cream py-16 lg:py-24">
+      <div className="px-5 lg:px-12 xl:px-20 max-w-lg lg:max-w-7xl mx-auto">
+        <div className="lg:flex lg:justify-between lg:items-end lg:mb-16">
+          <div>
+            <p className={`label-accent mb-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              SERVICES
+            </p>
 
-        <h2 className={`font-serif text-3xl italic mb-10 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          Nous vous accompagnons<br />
-          du d&eacute;but &agrave; la fin de<br />
-          votre projet.
-        </h2>
+            <h2 className={`font-serif text-3xl lg:text-4xl xl:text-5xl italic mb-10 lg:mb-0 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              Nous vous accompagnons<br />
+              du d&eacute;but &agrave; la fin de<br />
+              votre projet.
+            </h2>
+          </div>
+
+          {/* Desktop CTA */}
+          <div className="hidden lg:block">
+            <a href="#contact" className="btn-outline inline-block">
+              Parlons-en
+            </a>
+          </div>
+        </div>
       </div>
 
-      {/* Native horizontal scroll carousel */}
+      {/* Mobile: Native horizontal scroll carousel */}
       <div
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory px-5 pb-4"
+        className="lg:hidden flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory px-5 pb-4"
         style={{ scrollPaddingLeft: '20px' }}
       >
         {services.map((service, index) => (
@@ -647,8 +841,36 @@ const ServicesCarousel = () => {
         <div className="flex-shrink-0 w-4" />
       </div>
 
-      {/* CTA */}
-      <div className="px-5 max-w-lg mx-auto">
+      {/* Desktop: Grid layout */}
+      <div className="hidden lg:block px-12 xl:px-20">
+        <div className="max-w-7xl mx-auto grid grid-cols-3 gap-8">
+          {services.map((service, index) => (
+            <div
+              key={index}
+              className={`group cursor-pointer transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              style={{ transitionDelay: `${200 + index * 150}ms` }}
+            >
+              <div className="aspect-[3/4] mb-6 overflow-hidden rounded-sm">
+                <img src={service.image} alt={service.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              </div>
+              <div className="flex items-center gap-2 mb-3">
+                <h3
+                  className="font-medium text-dark text-lg"
+                  dangerouslySetInnerHTML={{ __html: service.title }}
+                />
+                <span className="text-accent group-hover:translate-x-2 transition-transform duration-300">&rarr;</span>
+              </div>
+              <p
+                className="text-dark/60 text-base leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: service.description }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile CTA */}
+      <div className="lg:hidden px-5 max-w-lg mx-auto">
         <div className="text-center mt-10">
           <a href="#contact" className="btn-outline inline-block">
             Parlons-en
@@ -661,7 +883,7 @@ const ServicesCarousel = () => {
 
 // Camionnette Section (Full Width Image)
 const CamionnetteSection = () => (
-  <section className="relative h-64 sm:h-80">
+  <section className="relative h-64 sm:h-80 lg:h-[50vh] xl:h-[60vh]">
     <img src="https://images.pexels.com/photos/4391239/pexels-photo-4391239.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Camionnette entreprise" className="w-full h-full object-cover" />
     <div className="absolute inset-0 bg-gradient-to-b from-cream via-transparent to-anthracite opacity-60" />
   </section>
@@ -789,17 +1011,17 @@ const TestimonialsSection = () => {
   }, [isVisible, testimonials.length])
 
   return (
-    <section ref={sectionRef} className="bg-anthracite py-16">
-      <div className="px-5 max-w-lg mx-auto">
-        <h2 className={`font-serif text-4xl sm:text-5xl text-cream text-center mb-10 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+    <section ref={sectionRef} id="avis" className="bg-anthracite py-16 lg:py-24">
+      <div className="px-5 lg:px-12 xl:px-20 max-w-lg lg:max-w-7xl mx-auto">
+        <h2 className={`font-serif text-4xl sm:text-5xl lg:text-6xl text-cream text-center mb-10 lg:mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           Avis Clients
         </h2>
       </div>
 
-      {/* Native horizontal scroll testimonials */}
+      {/* Mobile: Native horizontal scroll testimonials */}
       <div
         ref={scrollRef}
-        className={`flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory px-5 pb-4 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+        className={`lg:hidden flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory px-5 pb-4 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
       >
         {testimonials.map((testimonial, index) => (
           <div
@@ -827,16 +1049,45 @@ const TestimonialsSection = () => {
         <div className="flex-shrink-0 w-4" />
       </div>
 
+      {/* Desktop: Grid layout */}
+      <div className="hidden lg:block px-12 xl:px-20">
+        <div className="max-w-7xl mx-auto grid grid-cols-3 gap-8">
+          {testimonials.map((testimonial, index) => (
+            <div
+              key={index}
+              className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              style={{ transitionDelay: `${200 + index * 150}ms` }}
+            >
+              {/* Image */}
+              <div className="aspect-[4/3] mb-6 overflow-hidden rounded-sm">
+                <img src={testimonial.image} alt={`Maison ${testimonial.location}`} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+              </div>
+
+              {/* Quote */}
+              <blockquote
+                className="text-cream/90 text-xl italic text-center mb-4 font-serif leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: `"${testimonial.quote}"` }}
+              />
+
+              {/* Location */}
+              <p className="text-cream/50 text-sm text-center">
+                {testimonial.location}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Certifications */}
-      <div className="px-5 max-w-lg mx-auto">
-        <div className={`mt-12 flex gap-4 overflow-x-auto hide-scrollbar snap-x pb-2 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+      <div className="px-5 lg:px-12 xl:px-20 max-w-lg lg:max-w-7xl mx-auto">
+        <div className={`mt-12 lg:mt-20 flex gap-4 lg:gap-6 overflow-x-auto lg:overflow-visible hide-scrollbar snap-x lg:justify-center pb-2 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           {certifications.map((cert, index) => (
             <div
               key={index}
-              className="flex-shrink-0 w-20 h-20 rounded-lg bg-cream/10 flex items-center justify-center snap-start"
+              className="flex-shrink-0 w-20 h-20 lg:w-28 lg:h-28 rounded-lg bg-cream/10 flex items-center justify-center snap-start hover:bg-cream/20 transition-colors"
             >
               <span
-                className="text-cream/60 text-xs font-medium text-center px-2"
+                className="text-cream/60 text-xs lg:text-sm font-medium text-center px-2"
                 dangerouslySetInnerHTML={{ __html: cert }}
               />
             </div>
@@ -870,15 +1121,15 @@ const CTASection = () => {
   }, [])
 
   return (
-    <section ref={sectionRef} id="contact" className="bg-cream py-20 px-5">
-      <div className="max-w-lg mx-auto text-center">
-        <p className={`label-accent mb-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+    <section ref={sectionRef} id="contact" className="bg-cream py-20 lg:py-32 px-5 lg:px-12 xl:px-20">
+      <div className="max-w-lg lg:max-w-4xl mx-auto text-center">
+        <p className={`label-accent mb-6 lg:mb-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           TRAVAILLONS ENSEMBLE
         </p>
 
         <a
           href="tel:0612345678"
-          className={`block font-serif text-4xl sm:text-5xl md:text-6xl text-dark mb-8 hover:text-accent transition-colors duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+          className={`block font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-dark mb-8 lg:mb-12 hover:text-accent transition-colors duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
         >
           06 12 34 56 78
         </a>
@@ -895,60 +1146,89 @@ const CTASection = () => {
 
 // Footer Section
 const Footer = () => (
-  <footer className="bg-cream border-t border-dark/10 pt-12 pb-32 px-5">
-    <div className="max-w-lg mx-auto">
-      {/* Contact Info */}
-      <div className="mb-8">
-        <a href="tel:0612345678" className="block text-lg font-medium text-dark mb-1">
-          06 12 34 56 78
-        </a>
-        <a href="mailto:contact@toiture-martin.fr" className="text-dark/60 hover:text-accent transition-colors">
-          contact@toiture-martin.fr
-        </a>
-      </div>
+  <footer className="bg-cream border-t border-dark/10 pt-12 lg:pt-20 pb-32 lg:pb-24 px-5 lg:px-12 xl:px-20">
+    <div className="max-w-lg lg:max-w-7xl mx-auto">
+      {/* Desktop: Multi-column layout */}
+      <div className="lg:grid lg:grid-cols-4 lg:gap-12 lg:mb-16">
+        {/* Contact Info */}
+        <div className="mb-8 lg:mb-0">
+          <p className="label-accent mb-4">Contact</p>
+          <a href="tel:0612345678" className="block text-lg font-medium text-dark mb-1 hover:text-accent transition-colors">
+            06 12 34 56 78
+          </a>
+          <a href="mailto:contact@toiture-martin.fr" className="text-dark/60 hover:text-accent transition-colors">
+            contact@toiture-martin.fr
+          </a>
+        </div>
 
-      {/* Zones d'intervention */}
-      <div className="mb-8">
-        <p className="label-accent mb-3">Zones d'intervention</p>
-        <p className="text-dark/70">
-          Beaurins &middot; Arras &middot; Lens &middot; Douai &middot; B&eacute;thune
-        </p>
-      </div>
+        {/* Zones d'intervention */}
+        <div className="mb-8 lg:mb-0">
+          <p className="label-accent mb-4">Zones d'intervention</p>
+          <p className="text-dark/70 lg:leading-relaxed">
+            Beaurins<br className="hidden lg:block" />
+            <span className="lg:hidden">&middot;</span> Arras<br className="hidden lg:block" />
+            <span className="lg:hidden">&middot;</span> Lens<br className="hidden lg:block" />
+            <span className="lg:hidden">&middot;</span> Douai<br className="hidden lg:block" />
+            <span className="lg:hidden">&middot;</span> B&eacute;thune
+          </p>
+        </div>
 
-      {/* Social Links */}
-      <div className="flex gap-8 mb-8">
-        <a href="#" className="group">
-          <span className="text-dark font-medium">Facebook</span>
-          <span className="text-accent ml-2 group-hover:translate-x-1 inline-block transition-transform">&rarr;</span>
-          <span className="block text-dark/50 text-sm">Suivez-nous</span>
-        </a>
-        <a href="#" className="group">
-          <span className="text-dark font-medium">Instagram</span>
-          <span className="text-accent ml-2 group-hover:translate-x-1 inline-block transition-transform">&rarr;</span>
-          <span className="block text-dark/50 text-sm">Nos chantiers</span>
-        </a>
+        {/* Services */}
+        <div className="hidden lg:block">
+          <p className="label-accent mb-4">Services</p>
+          <ul className="space-y-2 text-dark/70">
+            <li><a href="#services" className="hover:text-accent transition-colors">Couverture Tuiles</a></li>
+            <li><a href="#services" className="hover:text-accent transition-colors">Ardoise & Zinc</a></li>
+            <li><a href="#services" className="hover:text-accent transition-colors">R&eacute;novation</a></li>
+            <li><a href="#services" className="hover:text-accent transition-colors">Urgence 24h</a></li>
+          </ul>
+        </div>
+
+        {/* Social Links */}
+        <div className="mb-8 lg:mb-0">
+          <p className="label-accent mb-4 hidden lg:block">Suivez-nous</p>
+          <div className="flex gap-8 lg:flex-col lg:gap-4">
+            <a href="#" className="group">
+              <span className="text-dark font-medium">Facebook</span>
+              <span className="text-accent ml-2 group-hover:translate-x-1 inline-block transition-transform">&rarr;</span>
+              <span className="block text-dark/50 text-sm">Suivez-nous</span>
+            </a>
+            <a href="#" className="group">
+              <span className="text-dark font-medium">Instagram</span>
+              <span className="text-accent ml-2 group-hover:translate-x-1 inline-block transition-transform">&rarr;</span>
+              <span className="block text-dark/50 text-sm">Nos chantiers</span>
+            </a>
+          </div>
+        </div>
       </div>
 
       <hr className="border-dark/10 mb-8" />
 
-      {/* Logo */}
-      <div className="mb-8">
-        <Logo size="large" />
-      </div>
+      {/* Bottom section */}
+      <div className="lg:flex lg:items-end lg:justify-between">
+        <div>
+          {/* Logo */}
+          <div className="mb-8 lg:mb-4">
+            <Logo size="large" />
+          </div>
 
-      {/* Address */}
-      <div className="text-dark/50 text-sm mb-4">
-        <p>12 rue des Artisans</p>
-        <p>62217 Beaurins</p>
-      </div>
+          {/* Address */}
+          <div className="text-dark/50 text-sm mb-4 lg:mb-0">
+            <p>12 rue des Artisans</p>
+            <p>62217 Beaurins</p>
+          </div>
+        </div>
 
-      {/* Copyright */}
-      <p className="text-dark/40 text-xs mb-2">
-        &copy; 2025 Toiture Martin. Tous droits r&eacute;serv&eacute;s.
-      </p>
-      <p className="text-dark/30 text-xs">
-        Made by <a href="https://devir.agency" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">devir.agency</a>
-      </p>
+        <div className="lg:text-right">
+          {/* Copyright */}
+          <p className="text-dark/40 text-xs mb-2">
+            &copy; 2025 Toiture Martin. Tous droits r&eacute;serv&eacute;s.
+          </p>
+          <p className="text-dark/30 text-xs">
+            Made by <a href="https://devir.agency" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">devir.agency</a>
+          </p>
+        </div>
+      </div>
     </div>
   </footer>
 )
@@ -984,8 +1264,8 @@ const FloatingMenu = () => {
   }
 
   return (
-    <>
-      {/* Burger Button */}
+    <div className="lg:hidden">
+      {/* Burger Button - Hidden on desktop */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-full shadow-lg transition-all duration-300 ${
@@ -1040,7 +1320,7 @@ const FloatingMenu = () => {
           ))}
         </nav>
       </div>
-    </>
+    </div>
   )
 }
 

@@ -160,6 +160,23 @@
   user-select: none;
 }
 
+/* Hero large M logo for desktop - fixed size, no overflow */
+.hero-logo-icon-desktop {
+  font-family: 'Oleo Script Swash Caps', cursive;
+  font-weight: 700;
+  font-size: clamp(350px, 35vw, 500px);
+  line-height: 0.85;
+  display: inline-block;
+  background-image: url('https://images.unsplash.com/photo-1557671009-600c3a1973ca?w=900&q=80');
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  cursor: default;
+  user-select: none;
+}
+
 /* Hero M container - only bottom part goes behind */
 .hero-logo-container {
   position: relative;
