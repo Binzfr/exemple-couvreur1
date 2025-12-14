@@ -1,12 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useRef } from 'react'
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
-
-// Image Placeholder Component
-const ImagePlaceholder = ({ className = '', text = 'IMAGE' }) => (
-  <div className={`bg-placeholder flex items-center justify-center ${className}`}>
-    <span className="text-dark/40 text-sm font-medium tracking-wider">{text}</span>
-  </div>
-)
+import { BrowserRouter, Routes, Route, Link, useLocation, useParams } from 'react-router-dom'
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -174,7 +167,270 @@ const Hero = () => {
   )
 }
 
-// Services Section (Dark) - Klindworth style
+// Services Data - Shared across components
+const servicesData = [
+  {
+    slug: 'couverture-tuiles',
+    title: 'Couverture Tuiles',
+    tagline: 'Tradition & Durabilit&eacute;.',
+    category: 'COUVERTURE',
+    image: 'https://images.pexels.com/photos/31406334/pexels-photo-31406334.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    heroImage: 'https://images.pexels.com/photos/31406334/pexels-photo-31406334.jpeg?auto=compress&cs=tinysrgb&w=1920',
+    description: 'La tuile reste le mat&eacute;riau de couverture le plus r&eacute;pandu en France. Notre expertise couvre tous les types de tuiles : terre cuite, b&eacute;ton, plates, canal ou m&eacute;caniques. Nous assurons une pose dans les r&egrave;gles de l\'art pour une &eacute;tanch&eacute;it&eacute; parfaite et une dur&eacute;e de vie optimale de votre toiture.',
+    features: [
+      { icon: '◆', title: 'Tuiles Terre Cuite', text: 'Mat&eacute;riau noble et durable, r&eacute;sistant aux intemp&eacute;ries et au gel.' },
+      { icon: '◆', title: 'Tuiles M&eacute;caniques', text: 'Installation rapide et excellente &eacute;tanch&eacute;it&eacute; gr&acirc;ce au syst&egrave;me d\'embo&icirc;tement.' },
+      { icon: '◆', title: 'Garantie D&eacute;cennale', text: 'Tous nos travaux sont couverts par notre assurance d&eacute;cennale.' },
+      { icon: '◆', title: 'Devis Gratuit', text: 'Estimation d&eacute;taill&eacute;e et transparente sous 48h.' }
+    ],
+    gallery: [
+      'https://images.pexels.com/photos/206172/pexels-photo-206172.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=800'
+    ]
+  },
+  {
+    slug: 'ardoise-zinc',
+    title: 'Ardoise & Zinc',
+    tagline: 'Finitions Nobles.',
+    category: 'COUVERTURE',
+    image: 'https://images.pexels.com/photos/34793389/pexels-photo-34793389.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    heroImage: 'https://images.pexels.com/photos/34793389/pexels-photo-34793389.jpeg?auto=compress&cs=tinysrgb&w=1920',
+    description: 'L\'ardoise et le zinc repr&eacute;sentent l\'excellence en mati&egrave;re de couverture. Ces mat&eacute;riaux nobles offrent une esth&eacute;tique incomparable et une long&eacute;vit&eacute; exceptionnelle pouvant d&eacute;passer 100 ans. Notre &eacute;quipe ma&icirc;trise les techniques traditionnelles de pose au clou comme les m&eacute;thodes modernes.',
+    features: [
+      { icon: '◆', title: 'Ardoise Naturelle', text: 'Pierre noble import&eacute;e d\'Espagne ou d\'Angers, taill&eacute;e sur mesure.' },
+      { icon: '◆', title: 'Zinc &agrave; Joint Debout', text: 'Technique de pose traditionnelle pour une &eacute;tanch&eacute;it&eacute; parfaite.' },
+      { icon: '◆', title: 'Ornements & Finitions', text: 'Fa&icirc;tages, ar&ecirc;tiers, noues et accessoires de finition.' },
+      { icon: '◆', title: 'Restauration Patrimoine', text: 'Intervention sur b&acirc;timents class&eacute;s et monuments historiques.' }
+    ],
+    gallery: [
+      'https://images.pexels.com/photos/164558/pexels-photo-164558.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/1115804/pexels-photo-1115804.jpeg?auto=compress&cs=tinysrgb&w=800'
+    ]
+  },
+  {
+    slug: 'renovation',
+    title: 'R&eacute;novation',
+    tagline: 'Redonner Vie &agrave; Votre Toit.',
+    category: 'R&Eacute;NOVATION',
+    image: 'https://images.pexels.com/photos/11467876/pexels-photo-11467876.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    heroImage: 'https://images.pexels.com/photos/11467876/pexels-photo-11467876.jpeg?auto=compress&cs=tinysrgb&w=1920',
+    description: 'Votre toiture vieillit ou pr&eacute;sente des signes de faiblesse ? Notre service de r&eacute;novation compl&egrave;te redonne une seconde jeunesse &agrave; votre toit. De la simple r&eacute;paration &agrave; la r&eacute;fection totale, nous intervenons avec pr&eacute;cision pour restaurer l\'&eacute;tanch&eacute;it&eacute; et l\'esth&eacute;tique de votre couverture.',
+    features: [
+      { icon: '◆', title: 'Diagnostic Complet', text: 'Inspection d&eacute;taill&eacute;e de l\'&eacute;tat de votre toiture et charpente.' },
+      { icon: '◆', title: 'D&eacute;moussage & Traitement', text: 'Nettoyage haute pression et application de produits anti-mousse.' },
+      { icon: '◆', title: 'Isolation Thermique', text: 'Am&eacute;lioration des performances &eacute;nerg&eacute;tiques de votre habitat.' },
+      { icon: '◆', title: 'Aides Financi&egrave;res', text: 'Accompagnement pour MaPrimeR&eacute;nov\' et autres subventions.' }
+    ],
+    gallery: [
+      'https://images.pexels.com/photos/3935333/pexels-photo-3935333.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/2893177/pexels-photo-2893177.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/9729882/pexels-photo-9729882.jpeg?auto=compress&cs=tinysrgb&w=800'
+    ]
+  },
+]
+
+// Service Page Component - Full dedicated page for each service
+const ServicePage = () => {
+  const { slug } = useParams()
+  const [isVisible, setIsVisible] = useState(false)
+  const [activeImage, setActiveImage] = useState(0)
+  const heroRef = useRef(null)
+
+  const service = servicesData.find(s => s.slug === slug)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 100)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [slug])
+
+  if (!service) {
+    return (
+      <div className="min-h-screen bg-cream flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="font-serif text-4xl text-dark mb-4">Service non trouv&eacute;</h1>
+          <Link to="/" className="btn-outline inline-block">Retour &agrave; l'accueil</Link>
+        </div>
+      </div>
+    )
+  }
+
+  // Get other services for "More services" section
+  const otherServices = servicesData.filter(s => s.slug !== slug)
+
+  return (
+    <div className="min-h-screen bg-anthracite">
+      <Header />
+
+      {/* Hero Section - Full width image with overlay */}
+      <div ref={heroRef} className="relative h-[60vh] lg:h-[80vh] overflow-hidden">
+        <div className={`absolute inset-0 transition-transform duration-1000 ease-out ${isVisible ? 'scale-100' : 'scale-110'}`}>
+          <img
+            src={service.heroImage}
+            alt={service.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-anthracite/50 via-anthracite/20 to-anthracite" />
+
+        {/* Back button */}
+        <Link
+          to="/#services"
+          className={`absolute top-24 lg:top-32 left-5 lg:left-12 xl:left-20 z-10 flex items-center gap-2 text-cream/80 hover:text-cream transition-all duration-700 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
+        >
+          <span className="text-lg">&larr;</span>
+          <span className="text-sm font-medium tracking-wider uppercase">Retour</span>
+        </Link>
+
+        {/* Title overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-16 xl:p-20">
+          <div className="max-w-7xl mx-auto">
+            <p className={`label-accent mb-4 lg:mb-6 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              {service.category}
+            </p>
+            <h1
+              className={`font-serif text-4xl sm:text-5xl lg:text-7xl xl:text-8xl text-cream font-medium transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              dangerouslySetInnerHTML={{ __html: service.title }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="bg-anthracite px-6 lg:px-16 xl:px-20 py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto">
+          {/* Two column layout on desktop */}
+          <div className="lg:grid lg:grid-cols-2 lg:gap-20">
+            {/* Left column - Description */}
+            <div>
+              <p
+                className={`text-accent text-xl lg:text-2xl xl:text-3xl font-serif italic mb-8 lg:mb-12 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                dangerouslySetInnerHTML={{ __html: service.tagline }}
+              />
+
+              <div className={`text-cream/80 text-lg lg:text-xl leading-relaxed mb-12 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <p dangerouslySetInnerHTML={{ __html: service.description }} />
+              </div>
+
+              {/* CTA Buttons */}
+              <div className={`flex flex-col sm:flex-row gap-4 mb-16 lg:mb-0 transition-all duration-700 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <a href="/#contact" className="btn-outline-light inline-block text-center">
+                  Demander un devis
+                </a>
+                <a href="tel:0612345678" className="btn-outline-light inline-block text-center">
+                  06 12 34 56 78
+                </a>
+              </div>
+            </div>
+
+            {/* Right column - Features */}
+            <div className={`transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className="grid grid-cols-1 gap-6">
+                {service.features.map((feature, idx) => (
+                  <div
+                    key={idx}
+                    className="border border-cream/20 p-6 lg:p-8 hover:border-accent/50 hover:bg-cream/5 transition-all duration-300 group"
+                  >
+                    <div className="flex items-start gap-4">
+                      <span className="text-accent text-2xl group-hover:scale-110 transition-transform duration-300">{feature.icon}</span>
+                      <div>
+                        <h4 className="text-cream font-medium text-lg mb-2" dangerouslySetInnerHTML={{ __html: feature.title }} />
+                        <p className="text-cream/60 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: feature.text }} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Gallery Section */}
+      <div className="bg-anthracite px-6 lg:px-16 xl:px-20 pb-16 lg:pb-24">
+        <div className="max-w-7xl mx-auto">
+          <h3 className={`font-serif text-2xl lg:text-3xl text-cream mb-8 lg:mb-12 transition-all duration-700 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            Nos r&eacute;alisations
+          </h3>
+
+          {/* Main gallery image */}
+          <div className={`aspect-[16/9] lg:aspect-[21/9] mb-4 overflow-hidden transition-all duration-700 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <img
+              src={service.gallery[activeImage]}
+              alt={`${service.title} - Réalisation ${activeImage + 1}`}
+              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+            />
+          </div>
+
+          {/* Thumbnails */}
+          <div className="grid grid-cols-3 gap-4">
+            {service.gallery.map((img, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveImage(idx)}
+                className={`aspect-[4/3] overflow-hidden transition-all duration-300 ${activeImage === idx ? 'ring-2 ring-accent' : 'opacity-60 hover:opacity-100'}`}
+              >
+                <img src={img} alt={`Miniature ${idx + 1}`} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Other Services Section */}
+      <div className="bg-cream px-6 lg:px-16 xl:px-20 py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto">
+          <p className="label-accent mb-4 text-center">AUTRES SERVICES</p>
+          <h3 className="font-serif text-3xl lg:text-4xl text-dark mb-12 lg:mb-16 text-center">
+            D&eacute;couvrez aussi
+          </h3>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {otherServices.map((otherService) => (
+              <Link
+                key={otherService.slug}
+                to={`/services/${otherService.slug}`}
+                className="group"
+              >
+                <div className="aspect-[16/9] mb-4 overflow-hidden">
+                  <img
+                    src={otherService.image}
+                    alt={otherService.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <h4
+                    className="text-dark text-xl font-medium group-hover:text-accent transition-colors"
+                    dangerouslySetInnerHTML={{ __html: otherService.title }}
+                  />
+                  <span className="text-accent group-hover:translate-x-2 transition-transform duration-300">&rarr;</span>
+                </div>
+                <p
+                  className="text-dark/60 text-sm"
+                  dangerouslySetInnerHTML={{ __html: otherService.tagline }}
+                />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <CTASection />
+      <Footer />
+      <FloatingMenu />
+    </div>
+  )
+}
+
+// Services Section (Dark) - Klindworth style with links to service pages
 const ServicesSection = () => {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef(null)
@@ -196,24 +452,6 @@ const ServicesSection = () => {
     return () => observer.disconnect()
   }, [])
 
-  const services = [
-    {
-      title: 'Couverture Tuiles',
-      tagline: 'Tradition & Durabilit&eacute;.',
-      image: 'https://images.pexels.com/photos/31406334/pexels-photo-31406334.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-    {
-      title: 'Ardoise & Zinc',
-      tagline: 'Finitions Nobles.',
-      image: 'https://images.pexels.com/photos/34793389/pexels-photo-34793389.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-    {
-      title: 'R&eacute;novation',
-      tagline: 'Redonner Vie &agrave; Votre Toit.',
-      image: 'https://images.pexels.com/photos/11467876/pexels-photo-11467876.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-  ]
-
   return (
     <section ref={sectionRef} id="services" className="bg-anthracite pt-16 lg:pt-24 pb-20 lg:pb-32 px-5 lg:px-12 xl:px-20 relative z-10">
       <div className="max-w-lg lg:max-w-7xl mx-auto">
@@ -234,10 +472,11 @@ const ServicesSection = () => {
 
         {/* Services Cards - Grid on desktop, vertical on mobile */}
         <div className="space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-8">
-          {services.map((service, index) => (
-            <div
-              key={service.title}
-              className={`group cursor-pointer transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+          {servicesData.map((service, index) => (
+            <Link
+              key={service.slug}
+              to={`/services/${service.slug}`}
+              className={`group block transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               style={{ transitionDelay: `${200 + index * 150}ms` }}
             >
               {/* Large Image with premium reveal */}
@@ -258,6 +497,12 @@ const ServicesSection = () => {
                   className={`absolute inset-0 bg-anthracite origin-bottom transition-transform duration-1000 ease-out ${isVisible ? 'scale-y-0' : 'scale-y-100'}`}
                   style={{ transitionDelay: `${250 + index * 200}ms` }}
                 />
+                {/* Hover overlay with "Voir plus" */}
+                <div className="absolute inset-0 bg-anthracite/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                  <span className="text-cream font-medium tracking-wider text-sm border border-cream/50 px-6 py-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    VOIR PLUS
+                  </span>
+                </div>
               </div>
 
               {/* Title with arrow */}
@@ -274,7 +519,7 @@ const ServicesSection = () => {
                 className="text-cream/50 text-sm lg:text-base"
                 dangerouslySetInnerHTML={{ __html: service.tagline }}
               />
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -1350,6 +1595,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/realisations" element={<RealisationsPage />} />
+        <Route path="/services/:slug" element={<ServicePage />} />
       </Routes>
     </BrowserRouter>
   )

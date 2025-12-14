@@ -264,3 +264,76 @@
 .animation-delay-300 { animation-delay: 0.3s; }
 .animation-delay-400 { animation-delay: 0.4s; }
 .animation-delay-500 { animation-delay: 0.5s; }
+
+/* Clip path animations for service detail overlay */
+.clip-path-full {
+  clip-path: inset(0 0 0 0);
+}
+
+.clip-path-zero {
+  clip-path: inset(100% 0 0 0);
+}
+
+/* Service detail overlay animations */
+@keyframes expandFromCard {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes collapseToCard {
+  0% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+  }
+}
+
+/* Smooth reveal animation */
+@keyframes revealUp {
+  0% {
+    clip-path: inset(100% 0 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes revealDown {
+  0% {
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Circle reveal for premium effect */
+@keyframes circleReveal {
+  0% {
+    clip-path: circle(0% at 50% 50%);
+  }
+  100% {
+    clip-path: circle(150% at 50% 50%);
+  }
+}
+
+.animate-reveal-up {
+  animation: revealUp 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.animate-reveal-down {
+  animation: revealDown 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.animate-circle-reveal {
+  animation: circleReveal 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
